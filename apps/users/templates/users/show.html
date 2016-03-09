@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>User Wall</title>		
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+</head>
+<style>
+	.message {
+		padding: 0px 10px;
+		border: 1px solid black;
+		background-color: #f8f8f8
+	}
+	.message-wrapper {
+		padding: 20px 10px;
+	}
+
+	.comment-container {
+		padding-left: 100px;
+	}
+
+	.comment-wrapper {
+		padding: 0px 10px;
+		border: 1px solid black;
+		background-color: #f8f8f8
+	}
+
+	.inline-block {
+		display:inline-block;
+	}
+
+</style>
+<body>
+	<div class="navbar navbar-default">
+		<div class="container">
+			<a class="navbar-brand" href="/">Home</a>
+			<ul class="nav navbar-nav">
+				<li><a href="/dashboard">Dashboard</a></li>
+				<li><a href="{% url 'show-user' request.user.id %}">Profile</a></li>
+				<li><a href="{% url 'edit-user' %}">Edit Information</a></li>
+				{% if request.user.is_superuser %}
+					<li><a href="{% url 'admin-create-user' %}">Add New User</a></li>
+				{% endif%}
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href=" {% url 'logout' %}">Log Out</a></li>
+			</ul> 
+		</div>
+	</div>
+	{{errors}}
+	<div class="container">
+		<h1>{{user.get_full_name}}</h1>
+		<p>Registered at: {{ user.created_at }}</p>
+		<p>User Id: {{user.id}}</p>
+		<p>Email Address: {{user.email}}</p>
+		<p>Description: {{user.description}}</p>
+		<h4>Leave a message for {{user.get_short_name}}</h4>
+		<form action="" method="POST">
+			{% csrf_token %}
+			<div class="form-group">
+				{{messageForm.message}}
+			</div>
+			<div class="pull-right">
+				<input class="btn btn-success" type="submit" value="Post" name="message-submit">
+			</div>
+		</form>
+	</div>
+	<br>
+	<div class="container">
+		{% for message in messages %}
+			<div class="message-wrapper">
+				<p class="inline-block"><a href="{% url 'show-user' message.sender.id %}">{{message.sender.get_full_name}}</a> wrote:</p>
+				<p class="pull-right">{{message.created_at | timesince}} ago</p>
+				<div class="message">
+					<p>{{message.message}}</p>
+				</div>
+				<br>
+				<div class="comment-container">
+					{% for comment in message.comment_set.all %}
+							<p class="inline-block"><a href="{% url 'show-user' comment.user.id %}">{{comment.user}}</a></p>
+							<p class="pull-right">{{comment.created_at | timesince}} ago</p>
+						<div class="comment-wrapper">
+							<p>{{comment.comment}}</p>
+						</div>
+					<br>
+					{% endfor %}
+					<form action="" method="POST">
+						{% csrf_token %}
+						<div class="form-group">
+							{{commentForm.comment}}
+							<input type="hidden" name="message" value="{{message.id}}">
+						</div>
+						<div class="pull-right">
+							<input class="btn btn-success" type="submit" value="Comment" name="comment-submit">
+						</div>
+					</form>
+				</div>
+			</div>
+		{% endfor%}				
+	</div>
+</body>
+</html>

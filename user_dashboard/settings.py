@@ -15,7 +15,6 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
@@ -39,8 +38,14 @@ INSTALLED_APPS = (
     'apps.home',
     'apps.signin',
     'apps.register',
-    'apps.users'
+    'apps.users',
+    'apps.dashboard'
 )
+
+############################ AUTH ############################
+
+AUTH_USER_MODEL = "users.CustomUser"
+AUTHENTICATION_BACKENDS = ('apps.users.backends.CustomUserAuth',)
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -103,3 +108,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+

@@ -6,11 +6,37 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 </head>
 <body>
+	<div class="navbar navbar-default">
+		<div class="container">
+			<a class="navbar-brand" href="/">Home</a>
+			{% if request.user.id %}
+			<ul class="nav navbar-nav">
+				<li><a href="/dashboard">Dashboard</a></li>
+				<li><a href="{% url 'show-user' request.user.id %}">Profile</a></li>
+				<li><a href="{% url 'edit-user' %}">Edit Information</a></li>
+				{% if request.user.is_superuser%}
+					<li><a href="{% url 'admin-create-user' %}">Add New User</a></li>
+				{% endif%}
+			</ul>
+			{% endif%}
+			<ul class="nav navbar-nav navbar-right">
+			{% if request.user.id %}
+				<li><a href=" {% url 'logout' %} ">Logout</a></li>
+			{% else %}
+				<li><a href=" {% url 'signin' %}">Sign In</a></li>
+			{% endif %}
+			</ul> 
+		</div>
+	</div>
 	<div class="container">
 		<div class="jumbotron">
-			<h1>Welcome to the Test</h1>
-			<p>We're going to build a cool application using an MTV framework, Django!</p>
-			<p><a class="btn btn-primary btn-lg" href="/signin">Start</a></p>
+			<h1>Welcome to User Dashboard</h1>
+			<p>We're going to build a cool application using an MVC framework, Django!</p>
+			{% if request.user.id %}
+				<p><a class="btn btn-primary btn-lg" href="/dashboard">Start</a>	
+			{% else %}
+				<p><a class="btn btn-primary btn-lg" href="/signin">Start</a></p>
+			{% endif%}
 		</div>
 		<div class="col-md-4">
 			<h5>Manage Users</h5>
