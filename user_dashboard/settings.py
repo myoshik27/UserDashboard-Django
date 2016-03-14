@@ -19,9 +19,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -43,7 +42,7 @@ INSTALLED_APPS = (
 )
 
 ############################ AUTH ############################
-
+# added these 2 lines to use custom authentication (checking email vs username)
 AUTH_USER_MODEL = "users.CustomUser"
 AUTHENTICATION_BACKENDS = ('apps.users.backends.CustomUserAuth',)
 

@@ -3,6 +3,7 @@ from django.views.generic import View
 from apps.users.models import CustomUser
 class DashboardView(View):
 	def get(self,request):
+		# if loggedin user is a superuser direct them to admin dashboard
 		if request.user.is_superuser:
 			return redirect('/dashboard/admin')
 		users = CustomUser.objects.all()
@@ -10,6 +11,8 @@ class DashboardView(View):
 
 class AdminDashboardView(View):
 	def get(self, request):
+		# if loggedin user is not a superuser, direct them to regular dashboard
+		# still need to block off non logged in users
 		if not request.user.is_superuser:
 			return redirect('/dashboard/')
 		users = CustomUser.objects.all()

@@ -2,6 +2,7 @@ from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 
+# CustomUserManager is Required because we are not using Django's built in User class
 class CustomUserManager(BaseUserManager):
 	def _create_user(self, email, password, is_superuser, is_staff, first_name, last_name):
 		now = timezone.now
